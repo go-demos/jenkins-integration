@@ -37,7 +37,22 @@ function evaluate_result {
     fi
 }
 
+function download_artifacts {
+    curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/$JENKINS_LATEST_JOB/artifact/*zip*/archive.zip" > archive.zip
+    mkdir artifacts
+    mv archive.zip artifacts
+    cd artifacts
+    unzip archive.zip
+    rm archive.zip
+}
+
+function clean_up {
+    rm -rf artifacts
+}
+
+clean_up
 latest_job
 wait_to_complete
 result
+download_artifacts
 evaluate_result
