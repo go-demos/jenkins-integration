@@ -1,8 +1,9 @@
 #!/bin/bash
 
-JENKINS_HOST=localhost
-JENKINS_PORT=10000
-JENKINS_JOB=website-build
+[ ! -z $JENKINS_HOST ] || JENKINS_HOST=localhost
+[ ! -z $JENKINS_PORT ] || JENKINS_PORT=10000
+[ ! -z $JENKINS_JOB ] || JENKINS_JOB=website-build
+
 offset=0
 console=""
 
