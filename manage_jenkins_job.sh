@@ -38,6 +38,7 @@ function wait_for_build_to_trigger {
     expected=`expr $JENKINS_LATEST_JOB + 1`
     echo "Will wait to get to $expected"
     is_building $expected
+    echo "Is Building? $is_building"
     while [ "$is_building" !=  "true" ]
     do
         is_building $expected
