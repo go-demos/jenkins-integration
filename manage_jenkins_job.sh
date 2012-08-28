@@ -3,6 +3,8 @@
 JENKINS_HOST=localhost
 JENKINS_PORT=10000
 JENKINS_JOB=website-build
+offset=0
+console=""
 
 function latest_job {
     JENKINS_LATEST_JOB=`curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/api/xml?tree=lastBuild\[number\]&xpath=//number/text()"`
@@ -16,12 +18,27 @@ function is_building {
     is_building=`jenkins_job_instance $1 "building" "//building/text()"`
 }
 
+function print_console {
+    console=`curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/$JENKINS_LATEST_JOB/logText/progressiveText"`
+    echo "$console"
+}
+
 function wait_to_complete {
     is_building $JENKINS_LATEST_JOB
     while [ "$is_building" !=  "false" ]
     do
         is_building $JENKINS_LATEST_JOB
     done
+}
+
+function wait_for_build_to_trigger {
+    expected=`expr $JENKINS_LATEST_JOB + 1`
+    is_building $expected
+    while [ "$is_building" !=  "true" ]
+    do
+        is_building $expected
+    done
+    latest_job
 }
 
 function result {
@@ -50,9 +67,16 @@ function clean_up {
     rm -rf artifacts
 }
 
+function trigger_jenkins {
+    curl -s -d "revision=$GO_REVISION_MATERIAL" "http://localhost:10000/job/$JENKINS_JOB/buildWithParameters"
+}
+
 clean_up
 latest_job
+trigger_jenkins
+wait_for_build_to_trigger
 wait_to_complete
-result
+print_console
 download_artifacts
+result
 evaluate_result
