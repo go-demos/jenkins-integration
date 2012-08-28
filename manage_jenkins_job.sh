@@ -30,6 +30,7 @@ function wait_to_complete {
     do
         is_building $JENKINS_LATEST_JOB
     done
+    echo "Build finished"
 }
 
 function wait_for_build_to_trigger {
@@ -40,6 +41,7 @@ function wait_for_build_to_trigger {
         is_building $expected
     done
     latest_job
+    echo "Triggered successfully. The new build number is: $JENKINS_LATEST_JOB"
 }
 
 function result {
@@ -69,7 +71,9 @@ function clean_up {
 }
 
 function trigger_jenkins {
+    echo "About to trigger $JENKINS_JOB"
     curl -s -d "revision=$GO_REVISION_MATERIAL" "http://localhost:10000/job/$JENKINS_JOB/buildWithParameters"
+    echo "Triggered"
 }
 
 clean_up
