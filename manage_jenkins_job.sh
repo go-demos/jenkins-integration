@@ -9,6 +9,7 @@ console=""
 
 function latest_job {
     JENKINS_LATEST_JOB=`curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/api/xml?tree=lastBuild\[number\]&xpath=//number/text()"`
+    echo "Current Latest: $JENKINS_LATEST_JOB"
 }
 
 function jenkins_job_instance {
@@ -38,7 +39,6 @@ function wait_for_build_to_trigger {
     expected=`expr $JENKINS_LATEST_JOB + 1`
     echo "Will wait to get to $expected"
     is_building $expected
-    echo "Is Building? $is_building"
     while [ "$is_building" !=  "true" ]
     do
         is_building $expected
