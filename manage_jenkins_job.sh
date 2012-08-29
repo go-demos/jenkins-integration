@@ -75,7 +75,7 @@ function clean_up {
 
 function trigger_jenkins {
     echo "About to trigger $JENKINS_JOB"
-    curl -s -d "revision=$GO_REVISION_MATERIAL" "http://localhost:10000/job/$JENKINS_JOB/buildWithParameters"
+	curl -d "revision=$GO_REVISION_MATERIAL" "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/buildWithParameters"
     echo "Triggered"
 }
 
