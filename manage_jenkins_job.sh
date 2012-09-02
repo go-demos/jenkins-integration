@@ -8,7 +8,7 @@ offset=0
 console=""
 
 function latest_job {
-    JENKINS_LATEST_JOB=`curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/api/xml?tree=lastBuild\[number\]&xpath=//number/text()"`
+    JENKINS_LATEST_JOB=`curl -s "http://$JENKINS_HOST:$JENKINS_PORT/job/$JENKINS_JOB/api/xml?xpath=//lastBuild/number/text()"`
     echo "Current Latest: $JENKINS_LATEST_JOB"
 }
 
